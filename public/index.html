@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SMD Message Sender</title>
+
+  <style>
+
+    body {
+
+      font-family: Arial, sans-serif;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      height: 100vh;
+
+      margin: 0;
+
+      background-color: #f0f0f0;
+
+    }
+
+    .container {
+
+      background: white;
+
+      padding: 20px;
+
+      border-radius: 8px;
+
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .container input, .container button {
+
+      width: 100%;
+
+      padding: 10px;
+
+      margin: 10px 0;
+
+    }
+
+    .container button {
+
+      background-color: #007BFF;
+
+      color: white;
+
+      border: none;
+
+      cursor: pointer;
+
+    }
+
+    .container button:hover {
+
+      background-color: #0056b3;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <input type="text" id="message" placeholder="Write a note.">
+
+    <button onclick="sendMessage()">Pass note</button>
+
+  </div>
+
+  
+
+  <script>
+
+    function sendMessage() {
+
+      const message = document.getElementById('message').value;
+
+      if (message.trim() === '') {
+
+        alert('Please enter a message.');
+
+        return;
+
+      }
+
+  
+
+      fetch('/send', {
+
+        method: 'POST',
+
+        headers: {
+
+          'Content-Type': 'application/json'
+
+        },
+
+        body: JSON.stringify({ message })
+
+      })
+
+      .then(response => response.json())
+
+      .then(data => {
+
+        if (data.url) {
+
+          window.location.href = data.url;
+
+        } else {
+
+          alert('Failed to send message.');
+
+        }
+
+      })
+
+      .catch(error => {
+
+        console.error('Error:', error);
+
+        alert('Failed to send message.');
+
+      });
+
+    }
+
+  </script>
+
+</body>
+
+</html>
